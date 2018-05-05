@@ -4,6 +4,8 @@ from dateutil import parser
 from dateutil import tz
 from collections import defaultdict, OrderedDict
 from datetime import datetime
+from decimal import Decimal
+
 
 def convert_datetime(date_str, target_format='%Y-%m-%d', target_tz=None):
     """
@@ -19,13 +21,20 @@ def convert_datetime(date_str, target_format='%Y-%m-%d', target_tz=None):
 
     return converted
 
+class DecimalEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, Decimal):
+            return str(round(obj, 2))
+        return json.JSONEncoder.default(self, obj)
 
 class Earthquake:
 
-    def __init__(self, datetime_occurred=None, event_type=None, location_source=None):
+    def __init__(self, datetime_occurred=None, event_type=None, location_source=None,
+                 magnitude=None):
         self.datetime_occurred = datetime_occurred
         self.location_source = location_source
         self.event_type = event_type
+        self.magnitude = magnitude
 
 
 if __name__ == '__main__':
@@ -34,7 +43,9 @@ if __name__ == '__main__':
     EVENT_TYPE = 'earthquake'
     TARGET_TZ = 'America/Los_Angeles'
 
+    location_magnitudes = {}
     location_counts = defaultdict(int)
+    total_magnitudes = defaultdict(Decimal)
     date_counts = defaultdict(int)
 
     with open(DATA_SOURCE, 'r') as csvfile:
@@ -43,26 +54,39 @@ if __name__ == '__main__':
 
         for row in reader:
             occurred = convert_datetime(row[0], target_tz=TARGET_TZ)
+            magnitude = Decimal(row[4])
             event_type = row[14]
             location_source = row[20]
 
             if event_type != EVENT_TYPE:
                 continue
 
-            eq = Earthquake(datetime_occurred=occurred, event_type=event_type,
+            eq = Earthquake(datetime_occurred=occurred,
+                            magnitude=magnitude,
+                            event_type=event_type,
                             location_source=location_source)
 
             location_counts[eq.location_source] += 1
             date_counts[eq.datetime_occurred] += 1
+            total_magnitudes[eq.location_source] += magnitude
+
+            location_magnitudes[eq.location_source] = (total_magnitudes[eq.location_source]
+                                                       / location_counts[eq.location_source])
 
     if location_counts:
-        print('Location source with most %s in 30 days: %s' % (EVENT_TYPE,
+        print('Which location source had the most %s(s)?: %s' % (EVENT_TYPE,
               max(location_counts, key=location_counts.get)))
     else:
         print('No event types matched.')
 
     if date_counts:
         ordered_dates = OrderedDict(sorted(date_counts.items(), key=lambda dt: dt[0]))
-        print('Number of occurrences per date: %s' % json.dumps((ordered_dates)))
+        print('Occurrences per date: %s' % json.dumps((ordered_dates)))
     else:
         print('No occurrences found.')
+
+    if location_magnitudes:
+        print('Average magnitudes per location: %s' %
+              json.dumps(location_magnitudes, cls=DecimalEncoder))
+    else:
+        print('No magnitudes available.')
