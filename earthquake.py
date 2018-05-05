@@ -12,7 +12,7 @@ class AverageMagnitude:
 
     @classmethod
     def callback(cls, data):
-        magnitude = data[4]
+        magnitude = data[4].strip()
         location = data[20].strip()
 
         if location not in cls.LOCATIONS:
