@@ -6,26 +6,8 @@ from collections import defaultdict, OrderedDict
 from datetime import datetime
 from decimal import Decimal
 
-
-def convert_datetime(date_str, target_format='%Y-%m-%d', target_tz=None):
-    """
-    Converts an ISO8601 formatted string to a target format and optional target timezone.
-    """
-
-    d = parser.isoparse(date_str)
-    if target_tz:
-        utc = d.replace(tzinfo=tz.gettz('UTC'))
-        d = utc.astimezone(tz.gettz(target_tz))
-
-    converted = d.strftime(target_format)
-
-    return converted
-
-class DecimalEncoder(json.JSONEncoder):
-    def default(self, obj):
-        if isinstance(obj, Decimal):
-            return str(round(obj, 2))
-        return json.JSONEncoder.default(self, obj)
+from utils.dates import convert_datetime
+from utils.encoding import DecimalEncoder
 
 class Earthquake:
 
