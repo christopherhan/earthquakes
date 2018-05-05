@@ -53,13 +53,15 @@ if __name__ == '__main__':
         next(reader)
 
         for row in reader:
-            occurred = convert_datetime(row[0], target_tz=TARGET_TZ)
-            magnitude = Decimal(row[4])
+
             event_type = row[14]
-            location_source = row[20]
 
             if event_type != EVENT_TYPE:
                 continue
+
+            occurred = convert_datetime(row[0], target_tz=TARGET_TZ)
+            magnitude = Decimal(row[4])
+            location_source = row[20]
 
             eq = Earthquake(datetime_occurred=occurred,
                             magnitude=magnitude,
