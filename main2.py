@@ -8,7 +8,8 @@ if __name__ == '__main__':
 
     DATA_SOURCE = 'data/1.0_month.csv'
 
-    # The CSV's field and value we want to filter the data by
+    # The CSV field we want to filter the data by. Currently set to filter
+    # on the 'type' field and only processes 'earthquake' events.
     FILTER_BY = ('type', EarthquakeEvent.EVENT_TYPE)
 
     # A list of CSV fields we want to extract and assign as object attributes
@@ -20,10 +21,10 @@ if __name__ == '__main__':
         reader = csv.reader(csvfile, delimiter=',')
         headings = next(reader)
 
-        fields = get_field_indices(SELECT_FIELDS, headings)
+        field_indices = get_field_indices(SELECT_FIELDS, headings)
 
         for row in reader:
-            attributes = lookup_field_values(fields, row, filter_by=FILTER_BY)
+            attributes = lookup_field_values(field_indices, row, filter_by=FILTER_BY)
             if not attributes:
                 continue
 
