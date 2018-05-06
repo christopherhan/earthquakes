@@ -4,7 +4,7 @@ import statistics
 from collections import defaultdict, OrderedDict
 from decimal import Decimal
 from utils.dates import convert_datetime
-from utils.encoding import DecimalEncoder
+from utils.encoding import DecimalEncoder, print_results
 
 class EventManager:
     def __init__(self, **kwargs):
@@ -75,6 +75,7 @@ def get_filtered_headings(headings_list, select_headings):
     return dict((x,y) for x,y in filtered)
 
 
+
 if __name__ == '__main__':
 
     DATA_SOURCE = 'data/1.0_month.csv'
@@ -107,7 +108,12 @@ if __name__ == '__main__':
                 e = EarthquakeEvent(**attributes)
                 manager.add_event(e)
 
-        print(manager.max_earthquakes_location())
-        print(manager.daily_histogram(tz='America/Los_Angeles'))
-        print(manager.average_magnitude_locations())
-        print(manager.average_magnitude_location(location='ci'))
+        question1_results = manager.max_earthquakes_location()
+        question2_results = manager.daily_histogram(tz='America/Los_Angeles')
+        question3_results = manager.average_magnitude_locations()
+        question4_results = manager.average_magnitude_location(location='ci')
+
+        print_results(question1_results, heading='Question 1 Results')
+        print_results(question2_results, heading='Question 2 Results')
+        print_results(question3_results, heading='Question 3 Results')
+        print_results(question4_results, heading='Question 4 Results')
