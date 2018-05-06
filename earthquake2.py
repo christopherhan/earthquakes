@@ -2,6 +2,7 @@ import csv
 import json
 import statistics
 from collections import defaultdict, OrderedDict
+from decimal import Decimal
 from utils.dates import convert_datetime
 from utils.encoding import DecimalEncoder
 
@@ -28,6 +29,23 @@ class EventManager:
         ordered_dates = OrderedDict(sorted(days.items(), key=lambda dt: dt[0]))
         return json.dumps(ordered_dates)
 
+    def average_magnitude_location(self, location=''):
+
+        locs = {}
+        for e in self.events:
+            if e.locationSource in locs:
+                locs[e.locationSource]['magnitudes'].append(Decimal(e.mag))
+            else:
+                locs[e.locationSource] = {
+                    'magnitudes': [Decimal(e.mag)],
+                    'avg': Decimal('0.00')
+                }
+
+        for key in locs:
+            magnitudes = locs[key]['magnitudes']
+            locs[key]['avg'] = statistics.mean(magnitudes)
+
+        return json.dumps({ key: round(locs[key]['avg'], 2) for key in locs }, cls=DecimalEncoder)
 
 class SeismicEvent:
     def __init__(self, **kwargs):
@@ -84,4 +102,5 @@ if __name__ == '__main__':
                 manager.add_event(e)
 
         print(manager.max_earthquakes_location())
-        print(manager.daily_histogram(timezone='America/Los_Angeles'))
+        print(manager.daily_histogram(tz='America/Los_Angeles'))
+        print(manager.average_magnitude_location())
