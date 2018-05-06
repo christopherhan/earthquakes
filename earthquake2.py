@@ -25,8 +25,8 @@ class ExplosionEvent(SeismicEvent):
     EVENT_TYPE = 'explosion'
 
 class EventManager:
-    def __init__(self, **kwargs):
-        self.events = []
+    def __init__(self, events=[]):
+        self.events = events
 
     def add_event(self, event):
         self.events.append(event)
@@ -36,11 +36,11 @@ class EventManager:
         locations = [e.locationSource for e in self.events]
         return statistics.mode(locations) if locations else None
 
-    def daily_histogram(self, target_tz='UTC'):
+    def daily_histogram(self, target_format='%Y-%m-%d', target_tz='UTC'):
         """Return frequency of events for each day"""
         days = defaultdict(int)
         for e in self.events:
-            date = convert_datetime(e.time, target_format='%Y-%m-%d',
+            date = convert_datetime(e.time, target_format=target_format,
                                     target_tz=target_tz)
             days[date] += 1
 
