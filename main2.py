@@ -1,47 +1,8 @@
 import csv
 from earthquake import AverageMagnitude
-from earthquake2 import EventManager, EarthquakeEvent, ExplosionEvent
+from earthquake2 import EventManager, EarthquakeEvent
 from utils.encoding import print_results
-
-
-def get_field_indices(select_fields, fields):
-    """Get specific fields and their corresponding index in `fields`.
-
-    Args:
-        select_fields (:obj:`list` of :obj: `str`): Subset of strings to be
-            selected from `fields`
-        fields (:obj:`list` of :obj: `str`:): List of all fields
-    Returns:
-        Dictionary whose keys are `select_fields` and values are index in `fields`
-    Examples:
-        >>> get_fields(['time', 'type'], ['time', 'mag', 'type', 'id'])
-        {'time': 0, 'type': 2}
-
-    """
-    field_indices = [(field, headings.index(field)) for field in fields]
-    filtered = list(filter(lambda x: x[0] in select_fields, field_indices))
-    return dict((x, y) for x, y in filtered)
-
-def lookup_field_values(all_fields, select_fields, filter_by=None):
-    """
-    Look up fields and their values in `all_fields`
-    """
-    attributes = {}
-
-    # Skip the rows with fields we don't want
-    if filter_by:
-        filter_field = filter_by[0]
-        filter_value = filter_by[1]
-
-        filter_index = fields[filter_field]
-        if all_fields[filter_index] != filter_value:
-            return None
-
-    for key in fields.keys():
-        index = select_fields[key]
-        attributes[key] = all_fields[index]
-
-    return attributes
+from utils.helpers import get_field_indices, lookup_field_values
 
 if __name__ == '__main__':
 
@@ -62,7 +23,7 @@ if __name__ == '__main__':
         fields = get_field_indices(SELECT_FIELDS, headings)
 
         for row in reader:
-            attributes = lookup_field_values(row, fields, filter_by=FILTER_BY)
+            attributes = lookup_field_values(fields, row, filter_by=FILTER_BY)
             if not attributes:
                 continue
 
