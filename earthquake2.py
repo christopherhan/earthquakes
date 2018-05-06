@@ -67,7 +67,7 @@ class EventManager:
                     'avg': Decimal('0.00')
                 }
 
-        for key in locs:
+        for key in locs.keys():
             magnitudes = locs[key]['magnitudes']
             locs[key]['avg'] = statistics.mean(magnitudes) if magnitudes else 0
 

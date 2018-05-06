@@ -54,6 +54,7 @@ class TestTimezoneConversion(unittest.TestCase):
         new_date = convert_datetime(self.utc_morning,
                                     target_format='%Y-%m-%d',
                                     target_tz='America/Los_Angeles')
+        self.assertEqual(new_date, self.previous_day)
 
     def test_pst_to_utc(self):
         """Test PST conversion to UTC"""
