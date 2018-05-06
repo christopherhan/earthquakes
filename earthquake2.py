@@ -1,10 +1,9 @@
 import csv
-from collections import defaultdict
 import json
+import statistics
+from collections import defaultdict, OrderedDict
 from utils.dates import convert_datetime
 from utils.encoding import DecimalEncoder
-
-SELECT_HEADINGS = ['time', 'locationSource', 'mag', 'type']
 
 class EventManager:
     def __init__(self, **kwargs):
@@ -15,11 +14,19 @@ class EventManager:
 
     def max_earthquakes_location(self):
         """Return the location with most earthquakes"""
-        sums = defaultdict(int)
-        for e in self.events:
-            sums[e.locationSource] += 1
+        return statistics.mode([e.locationSource for e in self.events])
 
-        return max(sums, key=sums.get)
+    def daily_histogram(self, tz='UTC'):
+        """
+        Return mode for each day
+        """
+        days = defaultdict(int)
+        for e in self.events:
+            date = convert_datetime(e.time, target_format='%Y-%m-%d', target_tz=tz)
+            days[date] += 1
+
+        ordered_dates = OrderedDict(sorted(days.items(), key=lambda dt: dt[0]))
+        return json.dumps(ordered_dates)
 
 
 class SeismicEvent:
@@ -52,6 +59,8 @@ if __name__ == '__main__':
     FILTER_FIELD = 'type'
     FILTER_VALUE = 'earthquake'
 
+    SELECT_HEADINGS = ['time', 'locationSource', 'mag', 'type']
+
     manager = EventManager()
 
     with open(DATA_SOURCE, 'r') as csvfile:
@@ -75,3 +84,4 @@ if __name__ == '__main__':
                 manager.add_event(e)
 
         print(manager.max_earthquakes_location())
+        print(manager.daily_histogram(timezone='America/Los_Angeles'))
