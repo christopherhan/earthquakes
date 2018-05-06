@@ -4,6 +4,26 @@ from decimal import Decimal
 from collections import defaultdict, OrderedDict
 from utils.dates import convert_datetime
 
+class SeismicEvent:
+    def __init__(self, **kwargs):
+        for key, value in kwargs.items():
+            setattr(self, key, value)
+
+    def __str__(self):
+        attributes = []
+        for key, value in self.__dict__.items():
+            attributes.append(f'{key}: {value}')
+        return ', '.join(attributes)
+
+    def __repr__(self):
+        return json.dumps(self.__dict__)
+
+class EarthquakeEvent(SeismicEvent):
+    EVENT_TYPE = 'earthquake'
+
+class ExplosionEvent(SeismicEvent):
+    EVENT_TYPE = 'explosion'
+
 class EventManager:
     def __init__(self, **kwargs):
         self.events = []
@@ -17,7 +37,7 @@ class EventManager:
         return statistics.mode(locations) if locations else None
 
     def daily_histogram(self, target_tz='UTC'):
-        """Return frequency for each day"""
+        """Return frequency of events for each day"""
         days = defaultdict(int)
         for e in self.events:
             date = convert_datetime(e.time, target_format='%Y-%m-%d',
@@ -52,22 +72,3 @@ class EventManager:
             locs[key]['avg'] = statistics.mean(magnitudes) if magnitudes else 0
 
         return {key: round(locs[key]['avg'], 2) for key in locs}
-
-class SeismicEvent:
-    def __init__(self, **kwargs):
-        for key, value in kwargs.items():
-            setattr(self, key, value)
-
-    def __str__(self):
-        for key, value in self.__dict__.items():
-            s += f'{key}: {value}'
-        return s
-
-    def __repr__(self):
-        return json.dumps(self.__dict__)
-
-class EarthquakeEvent(SeismicEvent):
-    EVENT_TYPE = 'earthquake'
-
-class ExplosionEvent(SeismicEvent):
-    EVENT_TYPE = 'explosion'

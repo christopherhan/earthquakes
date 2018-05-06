@@ -5,6 +5,11 @@ class AverageMagnitude:
 
     @classmethod
     def callback(cls, data):
+        """
+        Accepts a row of data from the CSV and calculates a running average
+        of the magnitudes per location without storing the sumself. (Question 4
+        extra credit)
+        """
         magnitude = data[4].strip()
         location = data[20].strip()
 
@@ -29,6 +34,7 @@ class AverageMagnitude:
 
     @classmethod
     def query(cls, location):
+        """Return the average magnitude for a given location"""
         try:
             return { 'average': str(round(cls.locations[location]['average'], 2)),
                      'count': cls.locations[location]['count'] }

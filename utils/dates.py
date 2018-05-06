@@ -5,7 +5,6 @@ def convert_datetime(date_str, from_tz='UTC', target_format=None, target_tz=None
     Converts an ISO8601 formatted string to an optional target format and
     optional target timezone.
     """
-
     d = parser.isoparse(date_str)
 
     if target_tz:
