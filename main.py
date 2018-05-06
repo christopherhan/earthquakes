@@ -29,10 +29,11 @@ if __name__ == '__main__':
             if event_type != EVENT_TYPE:
                 continue
 
-            occurred = convert_datetime(row[0].strip(), target_format='%Y-%m-%d',
-                                        target_tz=TARGET_TZ)
             magnitude = Decimal(row[4].strip())
             location_source = row[20].strip()
+            occurred = convert_datetime(row[0].strip(),
+                                        target_format='%Y-%m-%d',
+                                        target_tz=TARGET_TZ)
 
             eq = Earthquake(date_occurred=occurred,
                             magnitude=magnitude,
@@ -46,32 +47,34 @@ if __name__ == '__main__':
             location_magnitudes[eq.location_source] = (total_magnitudes[eq.location_source]
                                                        / location_counts[eq.location_source])
 
-            # Simulate callback being invoked for Question 4 extra credit
+            # Question 4. Simulate callback being invoked
             AverageMagnitude.callback(row)
 
-    print('############ Question 1 ############')
     if location_counts:
-        print('Which location source had the most %s(s)?: %s' % (EVENT_TYPE,
-              max(location_counts, key=location_counts.get)), '\n')
+        out = 'Which location source had the most %s(s)?: %s' % (EVENT_TYPE,
+              max(location_counts, key=location_counts.get))
     else:
-        print('No event types matched.', '\n')
+        out = 'No event types matched.'
 
-    print('############ Question 2 ############')
+    print(out)
+
     if date_counts:
         ordered_dates = OrderedDict(sorted(date_counts.items(), key=lambda dt: dt[0]))
         zone = TARGET_TZ if TARGET_TZ else 'UTC'
-        print('Occurrences per date (%s): %s' % (zone, json.dumps((ordered_dates))), '\n')
+        out = 'Occurrences per date (%s): %s' % (zone, json.dumps((ordered_dates)))
     else:
-        print('No occurrences found.', '\n')
+        out = 'No occurrenes found.'
 
-    print('############ Question 3 ############')
+    print(out)
+
     if location_magnitudes:
-        print('Average magnitudes per location: %s' %
-              json.dumps(location_magnitudes, cls=DecimalEncoder), '\n')
+        out = ('Average magnitudes per location: %s' %
+              json.dumps(location_magnitudes, cls=DecimalEncoder))
     else:
-        print('No magnitudes available.', '\n')
+        out = 'No magnitudes available.'
 
-    print('############ Question 4 ############')
-    print("Querying location 'ak': ", AverageMagnitude.query('ak'))
-    print("Querying location 'ci': ", AverageMagnitude.query('ci'))
-    print("Querying location 'hv': ", AverageMagnitude.query('hv'))
+    print(out)
+
+    # Question 4
+    print("Average magnitude for 'ak': ", AverageMagnitude.query('ak'))
+    print("Average magnitude for 'ci': ", AverageMagnitude.query('ci'))

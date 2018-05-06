@@ -40,10 +40,11 @@ if __name__ == '__main__':
     q2_extra_credit = manager.daily_histogram(target_tz='America/Los_Angeles')
     q3_results = manager.average_magnitude_locations()
     q4_results = manager.average_magnitude_location('ci')
+    q4_extra_credit = AverageMagnitude.query('ak')
 
     print_results(q1_results, heading='Question 1 Results')
     print_results(q2_results, heading='Question 2 Results')
     print_results(q2_extra_credit, heading=f'Question 2 Extra Credit (America/Los_Angeles)')
     print_results(q3_results, heading='Question 3 Results')
     print_results(q4_results, heading='Question 4 Results')
-    print_results(AverageMagnitude.query('ak'), heading='Question 4 extra credit (Querying "ak")')
+    print_results(q4_extra_credit, heading='Question 4 extra credit (Querying "ak")')

@@ -13,7 +13,8 @@ class TestTimezoneConversion(unittest.TestCase):
         self.previous_day = '2018-05-04'
 
     def test_utc_to_pyutc(self):
-        """Test the ISO format provided by the dataset and convert it to
+        """
+        Test the ISO format provided by the dataset and convert it to
         Python's representation.
         """
 
