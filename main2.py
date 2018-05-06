@@ -2,7 +2,7 @@ import csv
 from earthquake import AverageMagnitude
 from earthquake2 import EventManager, EarthquakeEvent
 from utils.encoding import print_results
-from utils.helpers import get_field_indices, lookup_field_values
+from utils.helpers import get_column_indices, lookup_column_values
 
 if __name__ == '__main__':
 
@@ -21,10 +21,10 @@ if __name__ == '__main__':
         reader = csv.reader(csvfile, delimiter=',')
         headings = next(reader)
 
-        field_indices = get_field_indices(SELECT_FIELDS, headings)
+        column_indices = get_column_indices(SELECT_FIELDS, headings)
 
         for row in reader:
-            attributes = lookup_field_values(field_indices, row, filter_by=FILTER_BY)
+            attributes = lookup_column_values(column_indices, row, filter_by=FILTER_BY)
             if not attributes:
                 continue
 

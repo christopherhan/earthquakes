@@ -1,5 +1,5 @@
 import unittest
-from utils.helpers import get_field_indices, lookup_field_values
+from utils.helpers import get_column_indices, lookup_column_values
 
 class TestHelpers(unittest.TestCase):
     def setUp(self):
@@ -23,18 +23,18 @@ class TestHelpers(unittest.TestCase):
                              'type': 'earthquake', 'locationSource': 'ci' }
         self.filter_by = ('type', 'earthquake')
 
-    def test_get_field_indices(self):
-        indices = get_field_indices(self.select_fields, self.all_fields)
+    def test_get_column_indices(self):
+        indices = get_column_indices(self.select_fields, self.all_fields)
         self.assertEqual(indices, self.field_indices)
         self.assertNotEqual(self.field_indices['time'], 1)
 
-    def test_lookup_field_values(self):
-        values = lookup_field_values(self.field_indices, self.data,
+    def test_lookup_column_values(self):
+        values = lookup_column_values(self.field_indices, self.data,
                                      filter_by=self.filter_by)
         self.assertEqual(values['time'], '2018-04-04T19:33:28.420Z')
         self.assertEqual(values['locationSource'], 'ci')
 
-    def test_lookup_field_values_nofilter(self):
-        values = lookup_field_values(self.field_indices, self.data)
+    def test_lookup_column_values_nofilter(self):
+        values = lookup_column_values(self.field_indices, self.data)
         self.assertEqual(values['time'], '2018-04-04T19:33:28.420Z')
         self.assertEqual(values['locationSource'], 'ci')

@@ -1,52 +1,54 @@
 
-def get_field_indices(select_fields, fields):
-    """Get specific fields and their corresponding index in `fields`.
+def get_column_indices(find_columns, headings):
+    """Find the column index in a list of headings.
 
     Args:
-        select_fields (:obj:`list` of :obj: `str`): Subset of strings to be
-            selected from `fields`
-        fields (:obj:`list` of :obj: `str`:): List of all fields
+        find_columns (:obj:`list` of :obj: `str`): List of column names we want
+            to find in list of headings
+        headings (:obj:`list` of :obj: `str`:): List of all headings
     Returns:
-        Dictionary whose keys are `select_fields` and values are index in `fields`
+        Dictionary whose keys are the column name and value is the index
     Examples:
-        >>> get_field_indices(['time', 'type'], ['time', 'mag', 'type', 'id'])
+        >>> get_column_indices(['time', 'type'], ['time', 'mag', 'type', 'id'])
         {'time': 0, 'type': 2}
-
     """
-    field_indices = [(field.strip(), fields.index(field)) for field in fields]
-    filtered = list(filter(lambda x: x[0] in select_fields, field_indices))
-    return dict((x, y) for x, y in filtered)
+    column_indices = [(field.strip(), headings.index(field)) for field in headings]
+    filtered = list(filter(lambda x: x[0] in find_columns, column_indices))
+    return dict((col, index) for col, index in filtered)
 
-def lookup_field_values(field_indices, data, filter_by=None):
-    """Look up fields in `data` by index in `field_indices`
+def lookup_column_values(column_indices, row, filter_by=None):
+    """Lookup column values in a row by its index.
 
     Args:
-        field_indices ('obj':`dict` of :obj: `int`) Dictionary of fields and
+        column_indices ('obj':`dict` of :obj: `int`) Dictionary of columns and
             their indices in data
-        data (:obj:`list` of :obj: `str`) List of all fields
+        row (:obj:`list` of :obj: `str`) List of all fields
         filter_by (:obj:`tuple` of :obj: `str`) Field and value to filter by
 
+    Returns:
+        Dictionary containing the column name and its value in row.
+        If `filter_by` is specified, only look for those values. Return None
+        in other cases.
+
     Examples:
-        >>> field_indices = {'time': 0, 'mag': 4, 'type': 5}
-        >>> data = ['2018-04-04T19:33:28.420Z', '33.3393333', '-117.143',
+        >>> column_indices = {'time': 0, 'mag': 4, 'type': 5}
+        >>> row = ['2018-04-04T19:33:28.420Z', '33.3393333', '-117.143',
         ... '-0.44', '1.08', 'earthquake']
         >>> filter = ('type', 'earthquake')
-        >>> lookup_field_values(field_indices, all_fields, filter_by=filter)
+        >>> lookup_column_values(column_indices, row, filter_by=filter)
         {'time': '2018-04-04T19:33:28.420Z', 'mag': '1.08', 'type': 'earthquake'}
     """
-    field_values = {}
+    column_values = {}
 
-    # Skip the rows with fields we don't want
     if filter_by:
-        filter_field = filter_by[0]
-        filter_value = filter_by[1]
+        filter_field, filter_value = filter_by
+        filter_index = column_indices[filter_field]
 
-        filter_index = field_indices[filter_field]
-        if data[filter_index] != filter_value:
+        if row[filter_index] != filter_value:
             return None
 
-    for key in field_indices.keys():
-        index = field_indices[key]
-        field_values[key] = data[index]
+    for key in column_indices.keys():
+        index = column_indices[key]
+        column_values[key] = row[index]
 
-    return field_values
+    return column_values
