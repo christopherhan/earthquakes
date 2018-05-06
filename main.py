@@ -29,7 +29,8 @@ if __name__ == '__main__':
             if event_type != EVENT_TYPE:
                 continue
 
-            occurred = convert_datetime(row[0].strip(), target_tz=TARGET_TZ)
+            occurred = convert_datetime(row[0].strip(), target_format='%Y-%m-%d',
+                                        target_tz=TARGET_TZ)
             magnitude = Decimal(row[4].strip())
             location_source = row[20].strip()
 

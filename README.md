@@ -3,26 +3,28 @@
 Downloads and analyzes the 30-day M1.0 earthquake feed from USGS.gov.
 
 ## Getting Started
+Ensure your are running Python >= 3.6:
 
-Clone the repo:
-
-    $ git clone git@gitlab.com:christopherhan/earthquakes.git
-    $ cd earthquakes
-
-Ensure your PYTHONPATH contains the project:
-
-    export PYTHONPATH=$PYTHONPATH:`pwd`
-
-Install `requirements.txt` and ensure you are running Python >= 3.6:
-
-    $ pip install -r requirements.txt
     $ which python
     /Users/chris/.virtualenvs/earthquakes/bin/python
     $ python --version
     Python 3.6.5
 
-Execute `main.py` (ensure you're in the project root):
+Clone the repo and ensure the project is added to your PYTHONPATH:
 
+    $ git clone git@gitlab.com:christopherhan/earthquakes.git
+    $ cd earthquakes
+    $ export PYTHONPATH=$PYTHONPATH:`pwd`
+
+Install packages in `requirements.txt`:
+
+    $ pip install -r requirements.txt
+
+
+Execute `main.py`:
+
+    $ pwd
+    /path/to/earthquakes
     $ python main.py
 
 

@@ -2,7 +2,8 @@ from dateutil import parser, tz
 
 def convert_datetime(date_str, from_tz='UTC', target_format=None, target_tz=None):
     """
-    Converts an ISO8601 formatted string to a target format and optional target timezone.
+    Converts an ISO8601 formatted string to an optional target format and
+    optional target timezone.
     """
 
     d = parser.isoparse(date_str)
