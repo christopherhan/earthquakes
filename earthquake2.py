@@ -13,7 +13,8 @@ class EventManager:
 
     def max_earthquakes_location(self):
         """Return the location with most earthquakes"""
-        return statistics.mode([e.locationSource for e in self.events])
+        locations = [e.locationSource for e in self.events]
+        return statistics.mode(locations) if locations else None
 
     def daily_histogram(self, target_tz='UTC'):
         """Return frequency for each day"""
@@ -31,7 +32,8 @@ class EventManager:
 
         magnitudes = [Decimal(e.mag) for e in list(
             filter(lambda x: x.locationSource == location, self.events))]
-        return {location: round(statistics.mean(magnitudes), 2)}
+
+        return {location: round(statistics.mean(magnitudes) if magnitudes else 0, 2)}
 
     def average_magnitude_locations(self):
         """Calculate the average magnitude for all locations"""
@@ -47,7 +49,7 @@ class EventManager:
 
         for key in locs:
             magnitudes = locs[key]['magnitudes']
-            locs[key]['avg'] = statistics.mean(magnitudes)
+            locs[key]['avg'] = statistics.mean(magnitudes) if magnitudes else 0
 
         return {key: round(locs[key]['avg'], 2) for key in locs}
 
@@ -56,9 +58,16 @@ class SeismicEvent:
         for key, value in kwargs.items():
             setattr(self, key, value)
 
+    def __str__(self):
+        for key, value in self.__dict__.items():
+            s += f'{key}: {value}'
+        return s
+
+    def __repr__(self):
+        return json.dumps(self.__dict__)
 
 class EarthquakeEvent(SeismicEvent):
     EVENT_TYPE = 'earthquake'
 
-    def __str__(self):
-        return json.dumps(self.__dict__)
+class ExplosionEvent(SeismicEvent):
+    EVENT_TYPE = 'explosion'
