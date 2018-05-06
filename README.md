@@ -28,16 +28,30 @@ Execute `main.py` (ensure you're in the project root):
 
 ## Unit Tests
 
-To run unit tests, run:
+To run unit tests, execute the test runner:
 
-    $ python -m unittest tests/tests.py
+    $ python tests/runner.py
 
 
 You should see output similar to the following:
 
 ```
-(earthquakes) Chriss-MacBook-Pro:earthquakes chris$ python tests/tests.py
-.......
+$ python tests/runner.py
+test_pst_to_est (timezone_conversion.TestTimezoneConversion)
+Test PST conversion to EST ... ok
+test_pst_to_utc (timezone_conversion.TestTimezoneConversion)
+Test PST conversion to UTC ... ok
+test_target_format (timezone_conversion.TestTimezoneConversion)
+Test converstion of UTC to PST in the target format ... ok
+test_utc_next_day (timezone_conversion.TestTimezoneConversion)
+Test conversion of UTC to a timezone in the next day ... ok
+test_utc_previous_day (timezone_conversion.TestTimezoneConversion)
+Test conversion of UTC to a timezone in the previous day ... ok
+test_utc_to_pst (timezone_conversion.TestTimezoneConversion)
+Test UTC conversion to PST ... ok
+test_utc_to_pyutc (timezone_conversion.TestTimezoneConversion)
+Test the ISO format provided by the dataset and convert it to ... ok
+
 ----------------------------------------------------------------------
 Ran 7 tests in 0.003s
 

@@ -69,6 +69,3 @@ class TestTimezoneConversion(unittest.TestCase):
                                     from_tz='America/Los_Angeles',
                                     target_tz='America/New_York')
         self.assertEqual(new_date, self.est)
-
-if __name__ == '__main__':
-    unittest.main()
