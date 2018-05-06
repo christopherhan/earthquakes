@@ -15,22 +15,23 @@ class EventManager:
         """Return the location with most earthquakes"""
         return statistics.mode([e.locationSource for e in self.events])
 
-    def daily_histogram(self, tz='UTC'):
+    def daily_histogram(self, target_tz='UTC'):
         """Return frequency for each day"""
         days = defaultdict(int)
         for e in self.events:
-            date = convert_datetime(e.time, target_format='%Y-%m-%d', target_tz=tz)
+            date = convert_datetime(e.time, target_format='%Y-%m-%d',
+                                    target_tz=target_tz)
             days[date] += 1
 
         ordered_dates = OrderedDict(sorted(days.items(), key=lambda dt: dt[0]))
         return ordered_dates
 
-    def average_magnitude_location(self, location=None):
+    def average_magnitude_location(self, location):
         """Calculate the average magnitude for a given location"""
-        if location:
-            magnitudes = [Decimal(e.mag) for e in list(
-                filter(lambda x: x.locationSource == location, self.events))]
-            return {location: round(statistics.mean(magnitudes), 2)}
+
+        magnitudes = [Decimal(e.mag) for e in list(
+            filter(lambda x: x.locationSource == location, self.events))]
+        return {location: round(statistics.mean(magnitudes), 2)}
 
     def average_magnitude_locations(self):
         """Calculate the average magnitude for all locations"""

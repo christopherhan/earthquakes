@@ -1,4 +1,5 @@
 import csv
+from earthquake import AverageMagnitude
 from earthquake2 import EventManager, EarthquakeEvent
 from utils.encoding import print_results
 
@@ -13,7 +14,6 @@ def get_filtered_fields(select_fields, fields):
 if __name__ == '__main__':
 
     DATA_SOURCE = 'data/1.0_month.csv'
-    TARGET_TZ = 'America/Los_Angeles'
 
     FILTER_FIELD = 'type'
     FILTER_VALUE = 'earthquake'
@@ -42,12 +42,18 @@ if __name__ == '__main__':
                 e = EarthquakeEvent(**attributes)
                 manager.add_event(e)
 
+            # Simulate callback being invoked for Question 4 extra credit
+            AverageMagnitude.callback(row)
+
     question1_results = manager.max_earthquakes_location()
-    question2_results = manager.daily_histogram(tz='America/Los_Angeles')
+    question2_results = manager.daily_histogram()
+    question2_extra_credit = manager.daily_histogram(target_tz='America/Los_Angeles')
     question3_results = manager.average_magnitude_locations()
-    question4_results = manager.average_magnitude_location(location='ci')
+    question4_results = manager.average_magnitude_location('ci')
 
     print_results(question1_results, heading='Question 1 Results')
     print_results(question2_results, heading='Question 2 Results')
+    print_results(question2_extra_credit, heading=f'Question 2 Extra Credit (America/Los_Angeles)')
     print_results(question3_results, heading='Question 3 Results')
     print_results(question4_results, heading='Question 4 Results')
+    print_results(AverageMagnitude.query('ak'), heading='Question 4 extra credit')

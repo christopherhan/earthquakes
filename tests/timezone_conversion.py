@@ -69,3 +69,18 @@ class TestTimezoneConversion(unittest.TestCase):
                                     from_tz='America/Los_Angeles',
                                     target_tz='America/New_York')
         self.assertEqual(new_date, self.est)
+
+    def test_same_offset_pst(self):
+        """Test converting time to same timezone"""
+        new_date = convert_datetime(self.pst,
+                                    from_tz='America/Los_Angeles',
+                                    target_tz='America/Vancouver')
+        self.assertEqual(new_date, self.pst)
+
+    def test_no_target_timezone(self):
+        """Test converting to no target timezone"""
+        new_date = convert_datetime(self.pyutc)
+        self.assertEqual(new_date, self.pyutc)
+
+        new_date = convert_datetime(self.pst)
+        self.assertEqual(new_date, self.pst)

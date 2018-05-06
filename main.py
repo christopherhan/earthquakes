@@ -47,7 +47,7 @@ if __name__ == '__main__':
             location_magnitudes[eq.location_source] = (total_magnitudes[eq.location_source]
                                                        / location_counts[eq.location_source])
 
-            # Simulate callback being invoked for Question 4
+            # Simulate callback being invoked for Question 4 extra credit
             AverageMagnitude.callback(row)
 
     print('############ Question 1 ############')
