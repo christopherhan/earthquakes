@@ -27,9 +27,15 @@ class EventManager:
             days[date] += 1
 
         ordered_dates = OrderedDict(sorted(days.items(), key=lambda dt: dt[0]))
-        return json.dumps(ordered_dates)
+        return ordered_dates
 
-    def average_magnitude_location(self, location=''):
+    def average_magnitude_location(self, location=None):
+
+        if location:
+            magnitudes = [Decimal(e.mag) for e in list(filter(lambda x: x.locationSource == location, self.events))]
+            return { location: round(statistics.mean(magnitudes), 2) }
+
+    def average_magnitude_locations(self):
 
         locs = {}
         for e in self.events:
@@ -45,7 +51,7 @@ class EventManager:
             magnitudes = locs[key]['magnitudes']
             locs[key]['avg'] = statistics.mean(magnitudes)
 
-        return json.dumps({ key: round(locs[key]['avg'], 2) for key in locs }, cls=DecimalEncoder)
+        return { key: round(locs[key]['avg'], 2) for key in locs }
 
 class SeismicEvent:
     def __init__(self, **kwargs):
@@ -103,4 +109,5 @@ if __name__ == '__main__':
 
         print(manager.max_earthquakes_location())
         print(manager.daily_histogram(tz='America/Los_Angeles'))
-        print(manager.average_magnitude_location())
+        print(manager.average_magnitude_locations())
+        print(manager.average_magnitude_location(location='ci'))

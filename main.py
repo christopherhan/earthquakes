@@ -1,5 +1,6 @@
 import csv
 import json
+import statistics
 from collections import defaultdict, OrderedDict
 from decimal import Decimal
 from earthquake import Earthquake, AverageMagnitude
