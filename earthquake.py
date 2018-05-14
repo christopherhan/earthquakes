@@ -7,7 +7,7 @@ class AverageMagnitude:
     def callback(cls, data):
         """
         Accepts a row of data from the CSV and calculates a running average
-        of the magnitudes per location without storing the sumself. (Question 4
+        of the magnitudes per location without storing the sum itself. (Question 4
         extra credit)
         """
         magnitude = data[4].strip()

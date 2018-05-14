@@ -47,8 +47,7 @@ def lookup_column_values(column_indices, row, filter_by=None):
         if row[filter_index] != filter_value:
             return None
 
-    for key in column_indices.keys():
-        index = column_indices[key]
+    for key, index in column_indices.items():
         column_values[key] = row[index]
 
     return column_values
