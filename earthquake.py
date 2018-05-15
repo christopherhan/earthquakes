@@ -13,24 +13,19 @@ class AverageMagnitude:
         magnitude = data[4].strip()
         location = data[20].strip()
 
-        if location not in cls.locations:
-            cls.locations[location] = {}
+        try:
+            loc = cls.locations[location]
+            average = loc['average']
+            count = loc['count']
+        except KeyError:
+            loc = cls.locations[location] = {}
+            count = loc['count'] = 0
+            average = loc['average'] = Decimal('0.00')
 
-        if 'average' in cls.locations[location]:
-            average = cls.locations[location]['average']
-        else:
-            average = cls.locations[location]['average'] = Decimal('0.00')
+        loc['count'] = count+1
+        loc['average'] = ((average*count) + Decimal(magnitude)) / (count+1)
 
-        if 'count' in cls.locations[location]:
-            count = cls.locations[location]['count']
-        else:
-            count = cls.locations[location]['count'] = 0
-
-        cls.locations[location]['count'] = count+1
-        # Cannot store sum. average=sum/count. Therefore sum=average*count
-        cls.locations[location]['average'] = ((average*count) + Decimal(magnitude)) / (count+1)
-
-        del magnitude, location, count, average
+        del loc, magnitude, location, count, average
 
     @classmethod
     def query(cls, location):
