@@ -19,7 +19,7 @@ Ensure you're running Python >= 3.6. Python's f-strings are utilized are only av
 
 Clone the repo and ensure the project is added to your PYTHONPATH:
 
-    $ git clone git@gitlab.com:christopherhan/earthquakes.git
+    $ git clone git@github.com:christopherhan/earthquakes.git
     $ cd earthquakes
     $ export PYTHONPATH=$PYTHONPATH:`pwd`
 
