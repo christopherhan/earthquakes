@@ -25,7 +25,7 @@ class ExplosionEvent(SeismicEvent):
     EVENT_TYPE = 'explosion'
 
 class EventManager:
-    def __init__(self, events=[]):
+    def __init__(self, events):
         self.events = events
 
     def add_event(self, event):

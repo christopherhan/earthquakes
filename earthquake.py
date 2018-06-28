@@ -25,8 +25,6 @@ class AverageMagnitude:
         loc['count'] = count+1
         loc['average'] = ((average*count) + Decimal(magnitude)) / (count+1)
 
-        del loc, magnitude, location, count, average
-
     @classmethod
     def query(cls, location):
         """Return the average magnitude for a given location"""
